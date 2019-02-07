@@ -1,10 +1,38 @@
-// take data from the form and display in an alert
 function startDataUpload() {
+    // now get the form values
     var name = document.getElementById("name").value;
     var surname = document.getElementById("surname").value;
     var module = document.getElementById("module").value;
     var postString = "name=" + name + "&surname=" + surname + "&module=" + module;
+
+    // now get the checkbox values -
+    // separate them with a | so that they can be
+    // split later on if necessary
+    var checkString = "";
+    for (var i = 1; i < 5; i++) {
+        if (document.getElementById("check" + i).checked === true) {
+            checkString = checkString + document.getElementById("check" + i).value + "||"
+        }
+    }
+    postString = postString + "&modulelist=" + checkString;
+
+
+    // now get the radio button values
+    if (document.getElementById("morning").checked) {
+        postString = postString + "&lecturetime=morning";
+    }
+    if (document.getElementById("afternoon").checked) {
+        postString = postString + "&lecturetime=afternoon";
+    }
+
+    // now get the select box values
+    var language = document.getElementById("languageselectbox").value;
+    postString = postString + "&language=" + language;
+
+    // pop an alert for display
     alert(postString);
+
+    // call the processData() which tell the server what type of data we are uploading
     processData(postString);
 }
 
@@ -22,7 +50,6 @@ function processData(postString) {
 
 // create the code to wait for the response from the data server,
 // and process the response once it is received
-
 function dataUploaded() {
     // this function listens out for the server to say that
     // the data is ready - i.e. has state 4
@@ -31,3 +58,5 @@ function dataUploaded() {
         document.getElementById("dataUploadResult").innerHTML = client.responseText;
     }
 }
+
+
